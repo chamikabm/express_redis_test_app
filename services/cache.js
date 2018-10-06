@@ -7,8 +7,29 @@ client.get = util.promisify(client.get);
 
 const exec = mongoose.Query.prototype.exec;
 
+mongoose.Query.prototype.cache = function() {
+  this.useCache = true;
+
+  /*
+  This return (i.e return this) enables to use cache() as a chainable function with other functions.
+
+  i.e :
+  ----------------------------------
+  Blog
+    .find({ _user: req.user.id })
+    .limit(10)
+    .cache()
+    .orderBy('asc')
+  ----------------------------------
+  */
+  return this;
+};
+
 mongoose.Query.prototype.exec = async function() {
-  console.log('Im about to run a query.');
+  console.log('Im about to run a query. Cache Enabled : {} ', this.useCache || false);
+  if (!this.useCache) {
+    exec.apply(this, arguments);
+  }
   // console.log(this.getQuery());
   // console.log(this.mongooseCollection.name);
 
