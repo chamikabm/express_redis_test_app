@@ -3,12 +3,13 @@ const redis = require('redis');
 const util = require('util');
 const redisUrl = 'redis://127.0.0.1:6379';
 const client = redis.createClient(redisUrl);
-client.get = util.promisify(client.get);
+client.hget = util.promisify(client.hget);
 
 const exec = mongoose.Query.prototype.exec;
 
-mongoose.Query.prototype.cache = function() {
+mongoose.Query.prototype.cache = function(options = {}) {
   this.useCache = true;
+  this.hashKey = JSON.stringify(options.key || '');
 
   /*
   This return (i.e return this) enables to use cache() as a chainable function with other functions.
@@ -28,7 +29,8 @@ mongoose.Query.prototype.cache = function() {
 mongoose.Query.prototype.exec = async function() {
   console.log('Im about to run a query. Cache Enabled : {} ', this.useCache || false);
   if (!this.useCache) {
-    exec.apply(this, arguments);
+    console.log('Serving from Mongo DB.');
+    return exec.apply(this, arguments);
   }
   // console.log(this.getQuery());
   // console.log(this.mongooseCollection.name);
@@ -38,13 +40,14 @@ mongoose.Query.prototype.exec = async function() {
   }));
 
   console.log('KEY : ', key);
+  console.log('hashKey : ', this.hashKey);
 
   // See if we have a value for key in redis.
-  const cachedValue = await client.get(key);
+  const cachedValue = await client.hget(this.hashKey, key);
 
   // If we do, return that.
   if (cachedValue) {
-    // console.log(cachedValue);
+     console.log('Serving from cache. cachedValue' , cachedValue);
 
     /*
     This is same as below code. Here this reference to the Query.prototype.exec, that is tha Query. From there we
@@ -82,8 +85,9 @@ mongoose.Query.prototype.exec = async function() {
   }
 
   // Otherwise, issue the query and store result in redis.
+  console.log('Serving from Mongo DB.');
   const result = await exec.apply(this, arguments);
-  client.set(key, JSON.stringify(result));
+  client.hset(this.hashKey, key, JSON.stringify(result), 'EX', 10);
 
   return result;
 };
