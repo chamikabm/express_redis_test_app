@@ -47,7 +47,7 @@ mongoose.Query.prototype.exec = async function() {
 
   // If we do, return that.
   if (cachedValue) {
-     console.log('Serving from cache. cachedValue' , cachedValue);
+     console.log('Serving from cache. cachedValue : {}' , cachedValue);
 
     /*
     This is same as below code. Here this reference to the Query.prototype.exec, that is tha Query. From there we
