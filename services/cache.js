@@ -27,7 +27,7 @@ mongoose.Query.prototype.cache = function(options = {}) {
 };
 
 mongoose.Query.prototype.exec = async function() {
-  console.log('Im about to run a query. Cache Enabled : {} ', this.useCache || false);
+  console.log('About to run a query. Cache Enabled : {} ', this.useCache || false);
   if (!this.useCache) {
     console.log('Serving from Mongo DB.');
     return exec.apply(this, arguments);
