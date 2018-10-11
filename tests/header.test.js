@@ -11,7 +11,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  // await browser.close();
+   await browser.close();
 });
 
 test('The header has the correct text.', async () => {
@@ -26,7 +26,7 @@ test('Clicking login starts oauth flow.', async () => {
   expect(url).toMatch('/accounts\.google\.com/');
 });
 
-test.only('When signed in, show logout button.', async () => {
+test('When signed in, show logout button.', async () => {
   const userId = '5bb25bd34d237098f0fc22f5';
   const Buffer = require('safe-buffer').Buffer;
   const sessionObject = {
@@ -43,5 +43,8 @@ test.only('When signed in, show logout button.', async () => {
   await page.setCookie({ name : 'session', value: session });
   await page.setCookie({ name : 'session.sig', value: sessionSig });
   await page.goto('localhost:3000'); // Refreshing the page.
-
+  const element = 'a[href="/auth/logout"]';
+  await page.waitFor(element); // Wait for the element to be loaded.
+  const text = await page.$eval(element, el => el.innerHTML);
+  expect(text).toEqual('Logout');
 });
