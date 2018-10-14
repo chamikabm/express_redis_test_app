@@ -59,6 +59,19 @@ describe('When logged in', async () => {
 });
 
 describe('When not logged in', async () => {
+  test('User cannot get blog posts.', async () => {
+    const result = await page.evaluate(
+      () => {
+        return fetch('api/blogs', { // fetch library is available with almost all the new browsers to work with http requests and responses.
+          method: 'GET',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(res => res.json());
+      }
+    );
+    expect(result).toEqual({ error: 'You must log in!' });  });
   test('User cannot create blog posts.', async () => {
     const result = await page.evaluate(
       () => {
