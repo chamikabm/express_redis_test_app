@@ -36,6 +36,18 @@ class CustomPage {
   async getContentsOf(selector) {
     return await this.page.$eval(selector, el => el.innerHTML);
   }
+
+  async get(path) {
+    return await this.page.evaluate((_path) => {
+        return fetch(_path, { // fetch library is available with almost all the new browsers to work with http requests and responses.
+          method: 'GET',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(res => res.json());
+      }, path);
+  }
 }
 
 module.exports = CustomPage;
