@@ -67,3 +67,23 @@ describe('When not logged in', async () => {
     expect(result).toEqual({ error: 'You must log in!' });
   });
 });
+
+describe('When not logged in test method two', async () => {
+  const actions = [
+    {
+      method: 'get',
+      path: 'api/blogs',
+    },
+    {
+      method: 'post',
+      path: 'api/blogs',
+      data: { title: 'My Title', content: 'My Content' }
+    }
+  ];
+  test('User cannot do blogs related actions.', async () => {
+    const results = await page.executeActions(actions);
+    for (const result of results) {
+      expect(result).toEqual({ error: 'You must log in!' });
+    }
+  });
+});
