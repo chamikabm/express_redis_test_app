@@ -32,6 +32,10 @@ class CustomPage {
     const element = 'a[href="/auth/logout"]';
     await this.page.waitFor(element); // Wait for the element to be loaded.
   }
+
+  async getContentsOf(selector) {
+    return await this.page.$eval(selector, el => el.innerHTML);
+  }
 }
 
 module.exports = CustomPage;

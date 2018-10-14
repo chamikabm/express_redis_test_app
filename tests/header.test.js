@@ -13,7 +13,7 @@ afterEach(async () => {
 
 test('The header has the correct text.', async () => {
 
-  const text = await page.$eval('a.brand-logo', el => el.innerHTML);
+  const text = await page.getContentsOf('a.brand-logo');
   expect(text).toEqual('Blogster');
 });
 
@@ -26,6 +26,6 @@ test('Clicking login starts oauth flow.', async () => {
 test('When signed in, show logout button.', async () => {
   await page.login();
   const element = 'a[href="/auth/logout"]';
-  const text = await page.$eval(element, el => el.innerHTML);
+  const text = await await page.getContentsOf(element);
   expect(text).toEqual('Logout');
 });
