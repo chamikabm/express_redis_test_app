@@ -9,11 +9,11 @@ class BlogShow extends Component {
 
   renderImage() {
     if(this.props.blog.imageUrl) {
-      return <img style={{
+      return <img alt='blog_img' style={{
         height: 250,
         width: 350,
       }} src={'https://s3-ap-southeast-1.amazonaws.com/my-blog-bucket-ckb/'
-      + this.props.blog.imageUrl}></img>
+      + this.props.blog.imageUrl}/>
     }
   }
 

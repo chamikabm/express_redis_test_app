@@ -5,5 +5,5 @@ module.exports = {
   cookieKey: '123123123',
   redisUrl: 'redis://127.0.0.1:6379',
   accessKeyId: 'AKIAIZC5DZAKPUW6DITQ',
-  secretAccessKey: '',
+  secretAccessKey: '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'
 };
