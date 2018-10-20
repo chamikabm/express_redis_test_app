@@ -13,7 +13,7 @@ module.exports = app => {
     const key = `${req.user.id}/${uuid()}.jpeg`;
     const params = {
       Bucket: 'my-blog-bucket-ckb',
-      ContentType: 'jpeg',
+      ContentType: 'image/jpeg',
       Key: key,
     };
 
